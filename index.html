@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Hosp74 Redactor Pro</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-cream">
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="top-left">
+        <button id="toggleLeft" class="icon-btn" type="button" aria-label="Volet gauche">☰</button>
+      </div>
+      <div class="top-center">
+        <div class="brand-title">HOSP74 REDACTOR PRO</div>
+        <div class="brand-subtitle">hospitalisation sevrage alcool · admissions · évolutions · sorties · consultation</div>
+      </div>
+      <div class="top-right">
+        <button id="themeToggle" class="icon-btn" type="button" aria-label="Thème">◐</button>
+        <button id="toggleRight" class="icon-btn" type="button" aria-label="Volet droit">≣</button>
+      </div>
+    </header>
+
+    <div id="mobileOverlay" class="mobile-overlay hidden"></div>
+
+    <aside id="leftPanel" class="side-panel left-panel">
+      <div class="panel-header">
+        <div class="panel-title">PRESETS À INJECTER</div>
+        <button id="closeLeft" class="mini-btn" type="button">—</button>
+      </div>
+      <div class="panel-scroll">
+        <section class="panel-card">
+          <div class="panel-card-title">RACCOURCIS CONTEXTUELS</div>
+          <div id="leftContextSummary" class="mini-summary"></div>
+        </section>
+
+        <section class="panel-card">
+          <div class="panel-card-title">INTRODUCTION</div>
+          <div id="presetIntro" class="token-wrap"></div>
+        </section>
+
+        <section class="panel-card">
+          <div class="panel-card-title">ANAMNÈSE / PARCOURS</div>
+          <div id="presetAnamnese" class="token-wrap"></div>
+        </section>
+
+        <section class="panel-card">
+          <div class="panel-card-title">ALCOOL / ADDICTO</div>
+          <div id="presetAlcohol" class="token-wrap"></div>
+        </section>
+
+        <section class="panel-card">
+          <div class="panel-card-title">ÉVOLUTION / MOTIVATION</div>
+          <div id="presetEvolution" class="token-wrap"></div>
+        </section>
+
+        <section class="panel-card">
+          <div class="panel-card-title">SORTIE / RELAIS</div>
+          <div id="presetDischarge" class="token-wrap"></div>
+        </section>
+
+        <section class="panel-card">
+          <div class="panel-card-title">EXAMEN CLINIQUE</div>
+          <div id="presetExam" class="token-wrap"></div>
+        </section>
+
+        <section class="panel-card">
+          <div class="panel-card-title">STYLE / FORMULATIONS</div>
+          <div id="presetStyle" class="token-wrap"></div>
+        </section>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <section class="control-block">
+        <div class="block-header">
+          <div class="block-title">PARAMÈTRES DE NOTE</div>
+          <div class="block-actions">
+            <button id="btnNewNote" class="mini-btn" type="button">nouvelle note</button>
+            <button id="btnGenerateBase" class="mini-btn primary" type="button">générer base</button>
+            <button id="btnHarmonize" class="mini-btn" type="button">réharmoniser</button>
+            <button id="btnCopy" class="mini-btn" type="button">copier</button>
+          </div>
+        </div>
+
+        <div class="form-grid four">
+          <div>
+            <label class="field-label" for="noteSubtype">Type d’écrit</label>
+            <select id="noteSubtype" class="input">
+              <option value="admission_s1">Admission semaine 1 alcool</option>
+              <option value="retour_s2">Admission retour semaine 2</option>
+              <option value="evolution_s1">Évolution semaine 1</option>
+              <option value="evolution_s2">Évolution semaine 2</option>
+              <option value="sortie_s1">Sortie fin semaine 1</option>
+              <option value="sortie_definitive">Sortie définitive fin semaine 2</option>
+              <option value="consultation">Consultation liée à l’hospitalisation</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" for="detailLevel">Niveau de détail</label>
+            <select id="detailLevel" class="input">
+              <option value="bref">Bref</option>
+              <option value="standard" selected>Standard</option>
+              <option value="complet">Complet</option>
+              <option value="narratif">Narratif</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" for="patientLabel">Patient / repère</label>
+            <input id="patientLabel" class="input" type="text" placeholder="Monsieur X / Initiales" />
+          </div>
+          <div>
+            <label class="field-label" for="noteDate">Date</label>
+            <input id="noteDate" class="input" type="date" />
+          </div>
+        </div>
+
+        <div class="form-grid four">
+          <div>
+            <label class="field-label" for="sexSelect">Sexe</label>
+            <select id="sexSelect" class="input">
+              <option value="homme">Homme</option>
+              <option value="femme">Femme</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" for="civilitySelect">Civilité</label>
+            <select id="civilitySelect" class="input">
+              <option value="auto">Automatique</option>
+              <option value="monsieur">Monsieur</option>
+              <option value="madame">Madame</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" for="focusSelect">Focalité clinique</label>
+            <select id="focusSelect" class="input">
+              <option value="">Neutre</option>
+              <option value="motivation">Motivation</option>
+              <option value="ambivalence">Ambivalence</option>
+              <option value="craving">Craving</option>
+              <option value="rechute">Reconsommation / rechute</option>
+              <option value="anxiete">Anxiété importante</option>
+              <option value="depressif">Symptomatologie dépressive</option>
+              <option value="sortie_fragile">Sortie fragile</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" for="styleToneSelect">Tonalité</label>
+            <select id="styleToneSelect" class="input">
+              <option value="sobre">Sobre</option>
+              <option value="fluide" selected>Fluide</option>
+              <option value="dense">Dense</option>
+              <option value="tres_humain">Très humain</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="quick-chip-row">
+          <button class="quick-chip" type="button" data-subtype-chip="admission_s1">admission S1</button>
+          <button class="quick-chip" type="button" data-subtype-chip="retour_s2">retour S2</button>
+          <button class="quick-chip" type="button" data-subtype-chip="evolution_s1">évolution S1</button>
+          <button class="quick-chip" type="button" data-subtype-chip="evolution_s2">évolution S2</button>
+          <button class="quick-chip" type="button" data-subtype-chip="sortie_s1">sortie S1</button>
+          <button class="quick-chip" type="button" data-subtype-chip="sortie_definitive">sortie définitive</button>
+          <button class="quick-chip" type="button" data-subtype-chip="consultation">consultation</button>
+        </div>
+      </section>
+
+      <section class="editor-block">
+        <div class="block-header">
+          <div class="block-title">RÉDACTION GLOBALE</div>
+          <div class="block-actions">
+            <button id="btnShowStructure" class="mini-btn" type="button">structure</button>
+            <button id="btnShowMissing" class="mini-btn" type="button">sections manquantes</button>
+          </div>
+        </div>
+        <div class="editor-toolbar">
+          <button class="inline-btn" type="button" data-inline="Je vois ce jour ">intro</button>
+          <button class="inline-btn" type="button" data-inline="Sur le plan clinique, ">clinique</button>
+          <button class="inline-btn" type="button" data-inline="Actuellement, ">actuellement</button>
+          <button class="inline-btn" type="button" data-inline="Le réseau de soins prévu comprend ">réseau prévu</button>
+          <button class="inline-btn" type="button" data-inline="Je reste à disposition pour toute précision utile. ">conclusion</button>
+        </div>
+        <textarea id="outputText" class="output" spellcheck="false" placeholder="Le texte final s’écrit ici"></textarea>
+      </section>
+
+      <section class="analysis-block">
+        <div class="analysis-grid">
+          <div class="analysis-card">
+            <div class="panel-card-title">STRUCTURE ACTIVE</div>
+            <div id="structurePreview" class="stack-list compact"></div>
+          </div>
+          <div class="analysis-card">
+            <div class="panel-card-title">SECTIONS MANQUANTES</div>
+            <div id="missingPreview" class="stack-list compact"></div>
+          </div>
+          <div class="analysis-card">
+            <div class="panel-card-title">AJOUTS ACTIFS</div>
+            <div id="activeAdditionsPreview" class="stack-list compact"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dropzone-block">
+        <div class="block-header">
+          <div class="block-title">ZONE D’ÉLABORATION</div>
+          <div class="block-actions">
+            <button id="btnClearWorkspaceModules" class="mini-btn" type="button">vider</button>
+          </div>
+        </div>
+        <div id="moduleDropzone" class="module-dropzone">
+          <div class="module-dropzone-placeholder">Fais glisser un module du bas ici pour l’avoir sous la main.</div>
+        </div>
+      </section>
+    </main>
+
+    <aside id="rightPanel" class="side-panel right-panel">
+      <div class="panel-header">
+        <div class="panel-title">TO-DO 74</div>
+        <button id="closeRight" class="mini-btn" type="button">—</button>
+      </div>
+      <div class="panel-scroll">
+        <section class="panel-card">
+          <div class="panel-card-title">SCÉNARIO</div>
+          <div id="scenarioChoices" class="token-wrap"></div>
+        </section>
+
+        <section class="panel-card">
+          <div class="panel-card-title">CHARGE</div>
+          <div class="form-grid two">
+            <div>
+              <label class="field-label" for="countS1">Admissions semaine 1</label>
+              <input id="countS1" class="input" type="number" min="0" value="0" />
+            </div>
+            <div>
+              <label class="field-label" for="countS2">Retours semaine 2</label>
+              <input id="countS2" class="input" type="number" min="0" value="0" />
+            </div>
+            <div>
+              <label class="field-label" for="countEvol">Patients évolution</label>
+              <input id="countEvol" class="input" type="number" min="0" value="0" />
+            </div>
+            <div>
+              <label class="field-label" for="countSortie">Sorties</label>
+              <input id="countSortie" class="input" type="number" min="0" value="0" />
+            </div>
+          </div>
+          <div class="inline-actions mt12">
+            <button id="btnGenerateTodo" class="mini-btn primary" type="button">générer to-do</button>
+            <button id="btnResetTodo" class="mini-btn" type="button">reset</button>
+          </div>
+        </section>
+
+        <section class="panel-card">
+          <div class="panel-card-title">CHECKLIST GLOBALE</div>
+          <div id="globalTodoList" class="stack-list compact"></div>
+        </section>
+
+        <section class="panel-card">
+          <div class="panel-card-title">PATIENT PAR PATIENT</div>
+          <div id="patientTodoCards" class="patient-card-list"></div>
+        </section>
+
+        <section class="panel-card">
+          <div class="panel-card-title">TÂCHE PERSONNALISÉE</div>
+          <label class="field-label" for="customGlobalTask">Ajouter une tâche globale</label>
+          <input id="customGlobalTask" class="input" type="text" placeholder="Ex : appeler pharmacie / vérifier bilan..." />
+          <div class="inline-actions mt12">
+            <button id="btnAddGlobalTask" class="mini-btn" type="button">ajouter</button>
+          </div>
+        </section>
+      </div>
+    </aside>
+
+    <footer class="bottom-dock">
+      <div id="bottomDock" class="bottom-dock-scroll">
+        <button class="dock-module" type="button" draggable="true" data-module="anamnese" data-window="anamneseWindow">ANAMNÈSE</button>
+        <button class="dock-module" type="button" draggable="true" data-module="alcool" data-window="alcoolWindow">ALCOOL</button>
+        <button class="dock-module" type="button" draggable="true" data-module="examen" data-window="examenWindow">EXAMEN</button>
+        <button class="dock-module" type="button" draggable="true" data-module="traitement" data-window="traitementWindow">TRAITEMENT</button>
+        <button class="dock-module" type="button" draggable="true" data-module="psychosocial" data-window="psychosocialWindow">PSYCHOSOCIAL</button>
+        <button class="dock-module" type="button" draggable="true" data-module="atcd" data-window="atcdWindow">ATCD</button>
+        <button class="dock-module" type="button" draggable="true" data-module="reseau" data-window="reseauWindow">RÉSEAU</button>
+        <button class="dock-module" type="button" draggable="true" data-module="notes" data-window="notesWindow">NOTES</button>
+      </div>
+    </footer>
+
+    <div id="modalOverlay" class="modal-overlay hidden"></div>
+
+    <div class="floating-layer">
+      <section id="anamneseWindow" class="floating-window hidden">
+        <div class="floating-header">
+          <button class="icon-btn close-window" type="button" data-close-window="anamneseWindow">✕</button>
+          <div class="floating-title">ANAMNÈSE</div>
+          <div></div>
+        </div>
+        <div class="floating-body">
+          <div class="dictation-row">
+            <label class="field-label" for="anamMotif">Motif / demande</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="anamMotif">dicter</button>
+          </div>
+          <textarea id="anamMotif" class="textarea"></textarea>
+
+          <div class="dictation-row">
+            <label class="field-label" for="anamHistory">Histoire globale / parcours</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="anamHistory">dicter</button>
+          </div>
+          <textarea id="anamHistory" class="textarea xl"></textarea>
+
+          <div class="dictation-row">
+            <label class="field-label" for="anamIntermediate">Semaine intermédiaire / retour</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="anamIntermediate">dicter</button>
+          </div>
+          <textarea id="anamIntermediate" class="textarea"></textarea>
+
+          <div class="dictation-row">
+            <label class="field-label" for="anamDemand">Demande / attente vis-à-vis de l’hospitalisation</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="anamDemand">dicter</button>
+          </div>
+          <textarea id="anamDemand" class="textarea"></textarea>
+
+          <div class="inline-actions mt12">
+            <button id="btnAddAnamnese" class="mini-btn primary" type="button">ajouter dans le paragraphe</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="alcoolWindow" class="floating-window hidden">
+        <div class="floating-header">
+          <button class="icon-btn close-window" type="button" data-close-window="alcoolWindow">✕</button>
+          <div class="floating-title">ALCOOL / ADDICTO</div>
+          <div></div>
+        </div>
+        <div class="floating-body">
+          <label class="field-label">Produit principal</label>
+          <div id="alcoolTypeChoices" class="token-wrap"></div>
+
+          <label class="field-label">Pattern</label>
+          <div id="alcoolPatternChoices" class="token-wrap"></div>
+
+          <div class="form-grid two">
+            <div>
+              <div class="dictation-row">
+                <label class="field-label" for="alcoolQty">Quantité</label>
+                <button class="mini-btn dictation-btn" type="button" data-dict-target="alcoolQty">dicter</button>
+              </div>
+              <input id="alcoolQty" class="input" type="text" />
+            </div>
+            <div>
+              <div class="dictation-row">
+                <label class="field-label" for="alcoolLast">Dernière prise</label>
+                <button class="mini-btn dictation-btn" type="button" data-dict-target="alcoolLast">dicter</button>
+              </div>
+              <input id="alcoolLast" class="input" type="text" />
+            </div>
+          </div>
+
+          <label class="field-label">Fonctions possibles</label>
+          <div id="alcoolFunctionChoices" class="token-wrap"></div>
+
+          <label class="field-label">ATCD de sevrage / gravité</label>
+          <div id="alcoolSeverityChoices" class="token-wrap"></div>
+
+          <div class="dictation-row">
+            <label class="field-label" for="alcoolOther">Autres consommations / précisions</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="alcoolOther">dicter</button>
+          </div>
+          <textarea id="alcoolOther" class="textarea"></textarea>
+
+          <div class="dictation-row">
+            <label class="field-label" for="alcoolAnalysis">Analyse clinique / rechute / craving</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="alcoolAnalysis">dicter</button>
+          </div>
+          <textarea id="alcoolAnalysis" class="textarea"></textarea>
+
+          <div class="inline-actions mt12">
+            <button id="btnAddAlcool" class="mini-btn primary" type="button">ajouter dans le paragraphe</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="examenWindow" class="floating-window hidden">
+        <div class="floating-header">
+          <button class="icon-btn close-window" type="button" data-close-window="examenWindow">✕</button>
+          <div class="floating-title">EXAMEN CLINIQUE / MENTAL</div>
+          <div></div>
+        </div>
+        <div class="floating-body">
+          <label class="field-label">Presets courts</label>
+          <div id="examShortChoices" class="token-wrap"></div>
+
+          <label class="field-label">Presets complets</label>
+          <div id="examLongChoices" class="token-wrap"></div>
+
+          <label class="field-label">Humeur</label>
+          <div id="examMoodChoices" class="token-wrap"></div>
+
+          <label class="field-label">Anxiété</label>
+          <div id="examAnxietyChoices" class="token-wrap"></div>
+
+          <label class="field-label">Pensée / contact</label>
+          <div id="examThoughtChoices" class="token-wrap"></div>
+
+          <label class="field-label">Risque</label>
+          <div id="examRiskChoices" class="token-wrap"></div>
+
+          <div class="dictation-row">
+            <label class="field-label" for="examFree">Compléments libres</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="examFree">dicter</button>
+          </div>
+          <textarea id="examFree" class="textarea xl"></textarea>
+
+          <div class="inline-actions mt12">
+            <button id="btnAddExamen" class="mini-btn primary" type="button">ajouter dans le paragraphe</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="traitementWindow" class="floating-window hidden">
+        <div class="floating-header">
+          <button class="icon-btn close-window" type="button" data-close-window="traitementWindow">✕</button>
+          <div class="floating-title">TRAITEMENT</div>
+          <div></div>
+        </div>
+        <div class="floating-body">
+          <label class="field-label">Molécules fréquentes</label>
+          <div id="medChoices" class="token-wrap"></div>
+
+          <div class="dictation-row">
+            <label class="field-label" for="medDose">Posologies / moments</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="medDose">dicter</button>
+          </div>
+          <textarea id="medDose" class="textarea"></textarea>
+
+          <label class="field-label">Adaptation thérapeutique</label>
+          <div id="medAdaptChoices" class="token-wrap"></div>
+
+          <div class="dictation-row">
+            <label class="field-label" for="medPlan">Traitement / adaptation / tolérance</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="medPlan">dicter</button>
+          </div>
+          <textarea id="medPlan" class="textarea xl"></textarea>
+
+          <div class="inline-actions mt12">
+            <button id="btnAddTraitement" class="mini-btn primary" type="button">ajouter dans le paragraphe</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="psychosocialWindow" class="floating-window hidden">
+        <div class="floating-header">
+          <button class="icon-btn close-window" type="button" data-close-window="psychosocialWindow">✕</button>
+          <div class="floating-title">PSYCHOSOCIAL</div>
+          <div></div>
+        </div>
+        <div class="floating-body">
+          <label class="field-label">Logement</label>
+          <div id="psyHousingChoices" class="token-wrap"></div>
+
+          <label class="field-label">Activité / travail</label>
+          <div id="psyWorkChoices" class="token-wrap"></div>
+
+          <label class="field-label">Facteurs de stress</label>
+          <div id="psyStressChoices" class="token-wrap"></div>
+
+          <div class="dictation-row">
+            <label class="field-label" for="psyFamily">Famille / entourage / relationnel</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="psyFamily">dicter</button>
+          </div>
+          <textarea id="psyFamily" class="textarea"></textarea>
+
+          <div class="dictation-row">
+            <label class="field-label" for="psyContext">Contexte psychosocial libre</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="psyContext">dicter</button>
+          </div>
+          <textarea id="psyContext" class="textarea xl"></textarea>
+
+          <div class="inline-actions mt12">
+            <button id="btnAddPsychosocial" class="mini-btn primary" type="button">ajouter dans le paragraphe</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="atcdWindow" class="floating-window hidden">
+        <div class="floating-header">
+          <button class="icon-btn close-window" type="button" data-close-window="atcdWindow">✕</button>
+          <div class="floating-title">ATCD</div>
+          <div></div>
+        </div>
+        <div class="floating-body">
+          <div class="dictation-row">
+            <label class="field-label" for="atcdPsych">ATCD psychiatriques personnels</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="atcdPsych">dicter</button>
+          </div>
+          <textarea id="atcdPsych" class="textarea"></textarea>
+
+          <div class="dictation-row">
+            <label class="field-label" for="atcdSom">ATCD somatiques</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="atcdSom">dicter</button>
+          </div>
+          <textarea id="atcdSom" class="textarea"></textarea>
+
+          <div class="dictation-row">
+            <label class="field-label" for="atcdAddicto">ATCD addictologiques</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="atcdAddicto">dicter</button>
+          </div>
+          <textarea id="atcdAddicto" class="textarea"></textarea>
+
+          <div class="dictation-row">
+            <label class="field-label" for="atcdFamily">ATCD familiaux psychiatriques</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="atcdFamily">dicter</button>
+          </div>
+          <textarea id="atcdFamily" class="textarea"></textarea>
+
+          <div class="inline-actions mt12">
+            <button id="btnAddAtcd" class="mini-btn primary" type="button">ajouter dans le paragraphe</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="reseauWindow" class="floating-window hidden">
+        <div class="floating-header">
+          <button class="icon-btn close-window" type="button" data-close-window="reseauWindow">✕</button>
+          <div class="floating-title">RÉSEAU</div>
+          <div></div>
+        </div>
+        <div class="floating-body">
+          <div class="dictation-row">
+            <label class="field-label" for="networkCurrent">Réseau actuel</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="networkCurrent">dicter</button>
+          </div>
+          <textarea id="networkCurrent" class="textarea"></textarea>
+
+          <div class="dictation-row">
+            <label class="field-label" for="networkPlanned">Réseau prévu / relais</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="networkPlanned">dicter</button>
+          </div>
+          <textarea id="networkPlanned" class="textarea xl"></textarea>
+
+          <div class="inline-actions mt12">
+            <button id="btnAddReseau" class="mini-btn primary" type="button">ajouter dans le paragraphe</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="notesWindow" class="floating-window hidden">
+        <div class="floating-header">
+          <button class="icon-btn close-window" type="button" data-close-window="notesWindow">✕</button>
+          <div class="floating-title">NOTES</div>
+          <div></div>
+        </div>
+        <div class="floating-body">
+          <label class="field-label" for="notesTarget">Destination</label>
+          <select id="notesTarget" class="input">
+            <option value="anamnese">Anamnèse</option>
+            <option value="consommation">Consommation</option>
+            <option value="examen_mental">Examen mental</option>
+            <option value="traitement">Traitement</option>
+            <option value="contexte_psychosocial">Psychosocial</option>
+            <option value="atcd_traitement">ATCD</option>
+            <option value="reseau_actuel">Réseau actuel</option>
+            <option value="reseau_prevu">Réseau prévu</option>
+            <option value="conclusion">Conclusion</option>
+            <option value="notes_libres">Notes libres</option>
+          </select>
+
+          <div class="dictation-row">
+            <label class="field-label" for="notesFree">Note libre</label>
+            <button class="mini-btn dictation-btn" type="button" data-dict-target="notesFree">dicter</button>
+          </div>
+          <textarea id="notesFree" class="textarea xl"></textarea>
+
+          <div class="inline-actions mt12">
+            <button id="btnAddNotes" class="mini-btn primary" type="button">ajouter dans le paragraphe</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="dictationWindow" class="floating-window small hidden">
+        <div class="floating-header">
+          <button class="icon-btn close-window" type="button" data-close-window="dictationWindow">✕</button>
+          <div class="floating-title">DICTÉE</div>
+          <div></div>
+        </div>
+        <div class="floating-body">
+          <div class="field-label">Cible active</div>
+          <div id="dictTargetLabel" class="mini-summary"></div>
+
+          <div class="inline-actions mt12">
+            <button id="btnStartDictation" class="mini-btn primary" type="button">démarrer</button>
+            <button id="btnStopDictation" class="mini-btn" type="button">stop</button>
+            <button id="btnValidateDictation" class="mini-btn" type="button">valider</button>
+          </div>
+
+          <div id="dictStatus" class="dict-status">En attente.</div>
+
+          <label class="field-label" for="dictScratch">Texte brut</label>
+          <textarea id="dictScratch" class="textarea xl"></textarea>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
